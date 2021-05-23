@@ -6,9 +6,11 @@ const emptyArr = []
 
 export default (
   keyframes: { [string | number]: { regions: Array<Region> } },
-  time: number
+  time: number,
+  propagate: bool,
+  original:object
 ) => {
-  if (keyframes[time || 0]) {
+  if ( (keyframes[time || 0]) && ((!propagate))) {
     return keyframes[time || 0].regions
   }
   // Get surrounding video keyframes
@@ -40,7 +42,7 @@ export default (
   // Weighted time coefficients for linear transition
   const w1 = (t2 - time) / (t2 - t1)
   const w2 = 1 - w1
-
+  
   for (const regionId in prevRegionMap) {
     const [prev, next] = [prevRegionMap[regionId], nextRegionMap[regionId]]
     if (!next) {
@@ -63,15 +65,30 @@ export default (
         break
       }
       case "box": {
-        impliedRegions.push({
-          ...prev,
-          highlighted: false,
-          editingLabels: false,
-          x: prev.x * w1 + next.x * w2,
-          y: prev.y * w1 + next.y * w2,
-          w: prev.w * w1 + next.w * w2,
-          h: prev.h * w1 + next.h * w2,
-        })
+        if (original && (next.x == original.x && next.y == original.y &&
+          next.h == original.h && next.w == original.w)){
+          console.log("this is the same region")
+          impliedRegions.push({
+            ...prev,
+            highlighted: false,
+            editingLabels: false,
+            x: prev.x ,
+            y: prev.y ,
+            w: prev.w,
+            h: prev.h ,
+          })
+        }
+        else{
+          impliedRegions.push({
+            ...prev,
+            highlighted: false,
+            editingLabels: false,
+            x: prev.x * w1 + next.x * w2,
+            y: prev.y * w1 + next.y * w2,
+            w: prev.w * w1 + next.w * w2,
+            h: prev.h * w1 + next.h * w2,
+          })
+        }
         break
       }
       case "polygon": {

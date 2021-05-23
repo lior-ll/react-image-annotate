@@ -12,6 +12,7 @@ import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon"
 import clamp from "clamp"
 import getLandmarksWithTransform from "../../utils/get-landmarks-with-transform"
 import setInLocalStorage from "../../utils/set-in-local-storage"
+import getImpliedVideoRegions from "./get-implied-video-regions"
 
 const getRandomId = () => Math.random().toString().split(".")[1]
 
@@ -66,14 +67,45 @@ export default (state: MainLayoutState, action: Action) => {
     const region = activeImage.regions[regionIndex]
     return [region, regionIndex]
   }
+  const proprgateRegion = (delete_id=null) => {
+    //releveant to videos only
+    if (!pathToActiveImage.includes("keyframes")){
+      return state
+    }
+    const keyframeTimes = Object.keys(state.keyframes)
+    .map((a) => parseInt(a))
+    .filter((a) => !isNaN(a))
+    .filter((a) => a > (state.currentVideoTime || 0))
+    const original = state.mode && !state.mode.isNew ?  state.mode.original : null
+    keyframeTimes.forEach((keyframe)=>{
+      const regions = (getImpliedVideoRegions(
+        state.keyframes,
+        keyframe,
+        true,
+        original
+      ) || []).filter((r) => r.id !== delete_id)
+
+      state = setIn(
+        saveToHistory(state, "Add Keyframe"),
+        ["keyframes", keyframe || 0],
+        {
+          regions: regions,
+        },
+      )
+      }
+    )
+    return state
+  }
   const modifyRegion = (regionId, obj) => {
     const [region, regionIndex] = getRegion(regionId)
     if (!region) return state
     if (obj !== null) {
-      return setIn(state, [...pathToActiveImage, "regions", regionIndex], {
+      state = setIn(state, [...pathToActiveImage, "regions", regionIndex], {
         ...region,
         ...obj,
       })
+      return state
+      //return proprgateRegion()
     } else {
       // delete region
       const regions = activeImage.regions
@@ -145,11 +177,12 @@ export default (state: MainLayoutState, action: Action) => {
       if (!isEqual(oldRegion.comment, action.region.comment)) {
         state = saveToHistory(state, "Change Region Comment")
       }
-      return setIn(
+      state = setIn(
         state,
         [...pathToActiveImage, "regions", regionIndex],
         action.region
       )
+      return proprgateRegion()
     }
     case "CHANGE_IMAGE": {
       if (!activeImage) return state
@@ -183,7 +216,11 @@ export default (state: MainLayoutState, action: Action) => {
       const { box, directions } = action
       state = closeEditors(state)
       if (directions[0] === 0 && directions[1] === 0) {
-        return setIn(state, ["mode"], { mode: "MOVE_REGION", regionId: box.id })
+        return setIn(state, ["mode"], {
+           mode: "MOVE_REGION",
+            regionId: box.id,
+            original: { x: box.x, y: box.y, w: box.w, h: box.h }
+           })
       } else {
         return setIn(state, ["mode"], {
           mode: "RESIZE_BOX",
@@ -685,7 +722,7 @@ export default (state: MainLayoutState, action: Action) => {
               Math.abs(state.mode.original.x - x) < 0.002 ||
               Math.abs(state.mode.original.y - y) < 0.002
             ) {
-              return setIn(
+              state = setIn(
                 modifyRegion(state.mode.regionId, null),
                 ["mode"],
                 null
@@ -693,13 +730,15 @@ export default (state: MainLayoutState, action: Action) => {
             }
           }
           if (state.mode.editLabelEditorAfter) {
-            return {
+            state = {
               ...modifyRegion(state.mode.regionId, { editingLabels: true }),
               mode: null,
             }
           }
+          state =  proprgateRegion()
         }
         case "MOVE_REGION":
+          state = proprgateRegion()
         case "RESIZE_KEYPOINTS":
         case "MOVE_POLYGON_POINT": {
           return { ...state, mode: null }
@@ -786,11 +825,12 @@ export default (state: MainLayoutState, action: Action) => {
     case "DELETE_REGION": {
       const regionIndex = getRegionIndex(action.region)
       if (regionIndex === null) return state
-      return setIn(
+      state = setIn(
         state,
         [...pathToActiveImage, "regions"],
         (activeImage.regions || []).filter((r) => r.id !== action.region.id)
       )
+      return proprgateRegion(action.region.id)
     }
     case "DELETE_SELECTED_REGION": {
       return setIn(
