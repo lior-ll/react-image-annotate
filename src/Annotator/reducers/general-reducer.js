@@ -221,7 +221,7 @@ export default (state: MainLayoutState, action: Action) => {
         [...pathToActiveImage, "regions", regionIndex],
         action.region
       )
-      return proprgateRegion()
+      return proprgateRegion(action.region.id, "proprgate-attributes", action.region)
     }
     case "CHANGE_IMAGE": {
       if (!activeImage) return state
@@ -754,6 +754,9 @@ export default (state: MainLayoutState, action: Action) => {
       const { mouseDownAt = { x, y } } = state
       if (!state.mode) return state
       state = setIn(state, ["mouseDownAt"], null)
+      const original = state.mode.original
+      const regId = state.mode.regionId
+      const isNew = state.mode.isNew
       switch (state.mode.mode) {
         case "RESIZE_BOX": {
           if (state.mode.isNew) {
@@ -774,10 +777,9 @@ export default (state: MainLayoutState, action: Action) => {
               mode: null,
             }
           }
-          state =  proprgateRegion()
         }
         case "MOVE_REGION":
-          state = proprgateRegion()
+          state = isNew ? proprgateRegion(regId, "proprgate-to-all", null) : proprgateRegion(regId, "proprgate-to-simillar-only", original)
         case "RESIZE_KEYPOINTS":
         case "MOVE_POLYGON_POINT": {
           return { ...state, mode: null }
@@ -869,7 +871,7 @@ export default (state: MainLayoutState, action: Action) => {
         [...pathToActiveImage, "regions"],
         (activeImage.regions || []).filter((r) => r.id !== action.region.id)
       )
-      return proprgateRegion(action.region.id)
+      return proprgateRegion(action.region.id, "proprgate-delete", null)
     }
     case "DELETE_SELECTED_REGION": {
       return setIn(
