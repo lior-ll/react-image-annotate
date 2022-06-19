@@ -67,8 +67,15 @@ export default (state: MainLayoutState, action: Action) => {
     const region = activeImage.regions[regionIndex]
     return [region, regionIndex]
   }
-  const proprgateRegion = (delete_id=null) => {
-    //releveant to videos only
+  const proprgateRegion = (regionId, proprgate, refRegion=null) => {
+    /* 
+    proprgate actions:
+    "proprgate-attributes"
+    "proprgate-to-all"
+    "proprgate-to-simillar-only"
+    "proprgate-delete"
+    */
+    //console.error("proprgateRegion called with", regionId, proprgate, refRegion);
     if (!pathToActiveImage.includes("keyframes")){
       return state
     }
@@ -76,20 +83,52 @@ export default (state: MainLayoutState, action: Action) => {
     .map((a) => parseInt(a))
     .filter((a) => !isNaN(a))
     .filter((a) => a > (state.currentVideoTime || 0))
-    const original = state.mode && !state.mode.isNew ?  state.mode.original : null
     keyframeTimes.forEach((keyframe)=>{
-      const regions = (getImpliedVideoRegions(
-        state.keyframes,
-        keyframe,
-        true,
-        original
-      ) || []).filter((r) => r.id !== delete_id)
-
+      const keyframeRegions = [...(getIn(state, ["keyframes", keyframe || 0, "regions"]))]
+      const [region, regionIndex] = getRegion(regionId)
+      const idxProp = keyframeRegions.findIndex( item => region && (region.id == item.id))
+      switch (proprgate) {
+        case "proprgate-to-all":
+          if (idxProp < 0)
+            keyframeRegions.push(region)
+          break
+        case "proprgate-attributes":
+          if (idxProp > -1) {
+            keyframeRegions[idxProp] = setIn(
+              keyframeRegions[idxProp],
+               ["cls"], 
+               refRegion.cls)
+            keyframeRegions[idxProp] = setIn(
+              keyframeRegions[idxProp],
+               ["comment"],
+                refRegion.comment)
+            keyframeRegions[idxProp] = setIn(
+              keyframeRegions[idxProp],
+               ["tags"], 
+               refRegion.tags)
+            keyframeRegions[idxProp] = setIn(
+              keyframeRegions[idxProp],
+               ["color"], 
+               refRegion.color)
+          }
+          break
+        case "proprgate-delete":
+          if (idxProp > -1)
+            keyframeRegions.splice(idxProp, 1)
+          break
+        case "proprgate-to-simillar-only":
+          
+          if (idxProp > -1)
+            if (keyframeRegions[idxProp].x === refRegion.x && keyframeRegions[idxProp].y === refRegion.y && 
+              keyframeRegions[idxProp].w === refRegion.w && keyframeRegions[idxProp].h === refRegion.h)
+              keyframeRegions[idxProp] = region
+          break
+      }
       state = setIn(
-        saveToHistory(state, "Add Keyframe"),
+        saveToHistory(state, "Prpoprgate region to Keyframe"),
         ["keyframes", keyframe || 0],
         {
-          regions: regions,
+          regions: keyframeRegions,
         },
       )
       }
