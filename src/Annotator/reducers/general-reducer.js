@@ -764,7 +764,7 @@ export default (state: MainLayoutState, action: Action) => {
               Math.abs(state.mode.original.x - x) < 0.002 ||
               Math.abs(state.mode.original.y - y) < 0.002
             ) {
-              state = setIn(
+              return setIn(
                 modifyRegion(state.mode.regionId, null),
                 ["mode"],
                 null
