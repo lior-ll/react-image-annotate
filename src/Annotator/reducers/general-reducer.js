@@ -1,18 +1,16 @@
 // @flow
 import type { MainLayoutState, Action } from "../../MainLayout/types"
 import { moveRegion } from "../../ImageCanvas/region-tools.js"
-import { getIn, setIn, updateIn } from "seamless-immutable"
-import moment from "moment"
+import { getIn, setIn } from "seamless-immutable"
 import isEqual from "lodash/isEqual"
 import getActiveImage from "./get-active-image"
 import { saveToHistory } from "./history-handler.js"
-import colors from "../../colors"
+import {colors} from "../../colors"
 import fixTwisted from "./fix-twisted"
 import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon"
 import clamp from "clamp"
 import getLandmarksWithTransform from "../../utils/get-landmarks-with-transform"
 import setInLocalStorage from "../../utils/set-in-local-storage"
-import getImpliedVideoRegions from "./get-implied-video-regions"
 
 const getRandomId = () => Math.random().toString().split(".")[1]
 
@@ -86,7 +84,7 @@ export default (state: MainLayoutState, action: Action) => {
     keyframeTimes.forEach((keyframe)=>{
       const keyframeRegions = [...(getIn(state, ["keyframes", keyframe || 0, "regions"]))]
       const [region, regionIndex] = getRegion(regionId)
-      const idxProp = keyframeRegions.findIndex( item => region && (region.id == item.id))
+      const idxProp = keyframeRegions.findIndex( item => region && (region.id === item.id))
       switch (proprgate) {
         case "proprgate-to-all":
           if (idxProp < 0)

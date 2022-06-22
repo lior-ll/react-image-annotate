@@ -2,7 +2,7 @@
 
 import * as muiColors from "@material-ui/core/colors"
 
-export const colors = [
+var colors = [
   muiColors.red[500],
   muiColors.blue[500],
   muiColors.green[500],
@@ -25,8 +25,11 @@ function reverseParseColor(rrggbb) {
   return parseInt(bbggrr, 16)
 }
 
+function setColors(values) {
+  colors = values.concat(colors)
+}
 export const colorInts: Array<number> = colors.map(
   (c) => (reverseParseColor(c) | transparency) >>> 0
 )
 
-export default colors
+export {colors, setColors}

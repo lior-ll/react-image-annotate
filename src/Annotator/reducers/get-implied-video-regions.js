@@ -6,11 +6,9 @@ const emptyArr = []
 
 export default (
   keyframes: { [string | number]: { regions: Array<Region> } },
-  time: number,
-  propagate: bool,
-  original:object
+  time: number
 ) => {
-  if ( (keyframes[time || 0]) && ((!propagate))) {
+  if (keyframes[time || 0]) {
     return keyframes[time || 0].regions
   }
   // Get surrounding video keyframes
@@ -65,20 +63,6 @@ export default (
         break
       }
       case "box": {
-        if (original && (next.x == original.x && next.y == original.y &&
-          next.h == original.h && next.w == original.w)){
-          console.log("this is the same region")
-          impliedRegions.push({
-            ...prev,
-            highlighted: false,
-            editingLabels: false,
-            x: prev.x ,
-            y: prev.y ,
-            w: prev.w,
-            h: prev.h ,
-          })
-        }
-        else{
           impliedRegions.push({
             ...prev,
             highlighted: false,
@@ -87,8 +71,7 @@ export default (
             y: prev.y * w1 + next.y * w2,
             w: prev.w * w1 + next.w * w2,
             h: prev.h * w1 + next.h * w2,
-          })
-        }
+        })
         break
       }
       case "polygon": {
