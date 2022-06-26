@@ -1,6 +1,6 @@
 // @flow
 
-import * as muiColors from "@material-ui/core/colors"
+import * as muiColors from "@mui/material/colors"
 
 var colors = [
   muiColors.red[500],

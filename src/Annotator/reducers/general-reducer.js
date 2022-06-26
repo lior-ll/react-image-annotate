@@ -43,9 +43,8 @@ export default (state: MainLayoutState, action: Action) => {
     state = setIn(state, ["lastAction"], action)
   }
 
-  const { currentImageIndex, pathToActiveImage, activeImage } = getActiveImage(
-    state
-  )
+  const { currentImageIndex, pathToActiveImage, activeImage } =
+    getActiveImage(state)
 
   const getRegionIndex = (region) => {
     const regionId =
@@ -708,9 +707,8 @@ export default (state: MainLayoutState, action: Action) => {
         }
         case "create-keypoints": {
           state = saveToHistory(state, "Create Keypoints")
-          const [
-            [keypointsDefinitionId, { landmarks, connections }],
-          ] = (Object.entries(state.keypointDefinitions): any)
+          const [[keypointsDefinitionId, { landmarks, connections }]] =
+            (Object.entries(state.keypointDefinitions): any)
 
           newRegion = {
             type: "keypoints",
