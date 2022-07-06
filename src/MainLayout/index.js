@@ -261,6 +261,9 @@ export const MainLayout = ({
               headerItems={[
                 !hidePrev && { name: "Prev" },
                 !hideNext && { name: "Next" },
+                state.annotationType == "video" && {
+                  name: "Nextframe"
+                },
                 state.annotationType !== "video"
                   ? null
                   : !state.videoPlaying

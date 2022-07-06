@@ -112,6 +112,12 @@ export const useDispatchHotkeyHandlers = ({ dispatch }) => {
           selectedTool: "create-pixel",
         })
       },
+      save_and_next_frame: () => {
+        dispatch({
+          type: "HEADER_BUTTON_CLICKED",
+          buttonName: "Nextframe"
+        })
+      },
       save_and_previous_sample: () => {
         dispatch({
           type: "HEADER_BUTTON_CLICKED",

@@ -9,7 +9,7 @@ const defaultShortcuts = {
       type: "SELECT_TOOL",
     },
     name: "Select Region",
-    key: "Escape",
+    key: "s",
   },
   zoom: {
     action: {
@@ -56,6 +56,14 @@ const defaultShortcuts = {
     },
     name: "Previous Image",
     key: "a",
+  },
+  "next-frame": {
+    action: {
+      type: "HEADER_BUTTON_CLICKED",
+      buttonName: "Nextframe"
+    },
+    name: "Next Frame",
+    key: "w" ,
   },
   "next-image": {
     action: {
