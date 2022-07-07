@@ -41,6 +41,11 @@ export const defaultHotkeys = [
     binding: "ArrowLeft",
   },
   {
+    id: "save_and_next_frame",
+    description: "Save and go to next  frame",
+    binding: "w",
+  },
+  {
     id: "save_and_next_sample",
     description: "Save and go to next sample",
     binding: "ArrowRight",
