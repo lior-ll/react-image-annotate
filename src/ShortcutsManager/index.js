@@ -49,7 +49,7 @@ export const defaultHotkeys = [
     id:"save_and_previous_frame",
     description: "Save and go to previous  frame",
     binding: "e",
-  }
+  },
   {
     id: "save_and_next_sample",
     description: "Save and go to next sample",

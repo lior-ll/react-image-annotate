@@ -60,7 +60,7 @@ const defaultShortcuts = {
   "next-frame": {
     action: {
       type: "HEADER_BUTTON_CLICKED",
-      buttonName: "Nextframe"
+      buttonName: "Nextframe",
     },
     name: "Next Frame",
     key: "r" ,
@@ -68,9 +68,9 @@ const defaultShortcuts = {
   "prev-frame": {
     action: {
       type: "HEADER_BUTTON_CLICKED",
-      buttonName: "Prevframe"
+      buttonName: "Prevframe",
     },
-    name: "Next Frame",
+    name: "Prev Frame",
     key: "e" ,
   },
   "next-image": {
