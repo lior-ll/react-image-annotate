@@ -43,8 +43,13 @@ export const defaultHotkeys = [
   {
     id: "save_and_next_frame",
     description: "Save and go to next  frame",
-    binding: "w",
+    binding: "r",
   },
+  {
+    id:"save_and_previous_frame",
+    description: "Save and go to previous  frame",
+    binding: "e",
+  }
   {
     id: "save_and_next_sample",
     description: "Save and go to next sample",
@@ -121,6 +126,12 @@ export const useDispatchHotkeyHandlers = ({ dispatch }) => {
         dispatch({
           type: "HEADER_BUTTON_CLICKED",
           buttonName: "Nextframe"
+        })
+      },
+      save_and_previous_frame: () => {
+        dispatch({
+          type: "HEADER_BUTTON_CLICKED",
+          buttonName: "Prevframe"
         })
       },
       save_and_previous_sample: () => {

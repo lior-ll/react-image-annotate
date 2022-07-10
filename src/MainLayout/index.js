@@ -264,6 +264,9 @@ export const MainLayout = ({
                 state.annotationType == "video" && {
                   name: "Nextframe"
                 },
+                state.annotationType == "video" && {
+                  name: "Prevframe"
+                },
                 state.annotationType !== "video"
                   ? null
                   : !state.videoPlaying

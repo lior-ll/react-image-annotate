@@ -63,7 +63,15 @@ const defaultShortcuts = {
       buttonName: "Nextframe"
     },
     name: "Next Frame",
-    key: "w" ,
+    key: "r" ,
+  },
+  "prev-frame": {
+    action: {
+      type: "HEADER_BUTTON_CLICKED",
+      buttonName: "Prevframe"
+    },
+    name: "Next Frame",
+    key: "e" ,
   },
   "next-image": {
     action: {
