@@ -40,7 +40,7 @@ export default (
   const impliedRegions = []
 
   // Weighted time coefficients for linear transition
-  const w1 = (t2 - time) / (t2 - t1)
+  let w1 = (t2 - time) / (t2 - t1)
   if (!animate)
     w1 = 0
   const w2 = 1 - w1
