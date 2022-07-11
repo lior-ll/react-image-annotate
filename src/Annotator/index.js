@@ -85,6 +85,7 @@ export const Annotator = ({
   videoSrc,
   videoTime = 0,
   videoName,
+  doAnimationAnnotation=true,
   onExit,
   onNextImage,
   onPrevImage,
@@ -133,6 +134,7 @@ export const Annotator = ({
       enabledTools,
       history: [],
       videoName,
+      doAnimationAnnotation,
       keypointDefinitions,
       allowComments,
       ...(annotationType === "image"

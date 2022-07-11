@@ -6,7 +6,9 @@ const emptyArr = []
 
 export default (
   keyframes: { [string | number]: { regions: Array<Region> } },
-  time: number
+  time: number,
+  animate: Boolean = true,
+
 ) => {
   if (keyframes[time || 0]) {
     return keyframes[time || 0].regions
@@ -39,6 +41,8 @@ export default (
 
   // Weighted time coefficients for linear transition
   const w1 = (t2 - time) / (t2 - t1)
+  if (!animate)
+    w1 = 0
   const w2 = 1 - w1
   
   for (const regionId in prevRegionMap) {
