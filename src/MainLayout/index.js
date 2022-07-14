@@ -262,10 +262,10 @@ export const MainLayout = ({
                 !hidePrev && { name: "Prev" },
                 !hideNext && { name: "Next" },
                 state.annotationType == "video" && {
-                  name: "Nextframe"
+                  name: "Prevframe"
                 },
                 state.annotationType == "video" && {
-                  name: "Prevframe"
+                  name: "Nextframe"
                 },
                 state.annotationType !== "video"
                   ? null
