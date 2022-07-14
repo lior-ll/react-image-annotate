@@ -91,22 +91,26 @@ export default (state: MainLayoutState, action: Action) => {
           break
         case "proprgate-attributes":
           if (idxProp > -1) {
-            keyframeRegions[idxProp] = setIn(
-              keyframeRegions[idxProp],
-               ["cls"], 
-               refRegion.cls)
-            keyframeRegions[idxProp] = setIn(
-              keyframeRegions[idxProp],
-               ["comment"],
-                refRegion.comment)
-            keyframeRegions[idxProp] = setIn(
-              keyframeRegions[idxProp],
-               ["tags"], 
-               refRegion.tags)
-            keyframeRegions[idxProp] = setIn(
-              keyframeRegions[idxProp],
-               ["color"], 
-               refRegion.color)
+            const isSpecialCls = state.specialClsList.indexOf(refRegion.cls) != -1;
+            if (!isSpecialCls || isSpecialCls && (keyframeRegions[idxProp].x === refRegion.x && keyframeRegions[idxProp].y === refRegion.y && 
+              keyframeRegions[idxProp].w === refRegion.w && keyframeRegions[idxProp].h === refRegion.h)){
+                keyframeRegions[idxProp] = setIn(
+                  keyframeRegions[idxProp],
+                  ["cls"], 
+                  refRegion.cls)
+                keyframeRegions[idxProp] = setIn(
+                  keyframeRegions[idxProp],
+                  ["comment"],
+                    refRegion.comment)
+                keyframeRegions[idxProp] = setIn(
+                  keyframeRegions[idxProp],
+                  ["tags"], 
+                  refRegion.tags)
+                keyframeRegions[idxProp] = setIn(
+                  keyframeRegions[idxProp],
+                  ["color"], 
+                  refRegion.color)
+              }
           }
           break
         case "proprgate-delete":
