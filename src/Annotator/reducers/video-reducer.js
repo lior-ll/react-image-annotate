@@ -36,14 +36,14 @@ export default (state: MainLayoutVideoAnnotationState, action: Action) => {
         case "pause":
           return setIn(state, ["videoPlaying"], false)
         case "nextframe": {
-          const nextFrameTime = Math.floor((state.currentVideoTime || 0) /1000 )*1000 + 1000
+          const nextFrameTime = Math.floor((state.currentVideoTime || 0) /1000 )*1000 + 1010
           if (nextFrameTime <= state.videoDuration)    
             return setIn(state, ["currentVideoTime"], nextFrameTime)
           else
             return setIn(state, ["videoPlaying"], false)
         }
         case "prevframe": {
-          const prevFrameTime = Math.floor((state.currentVideoTime || 0) /1000 )*1000 - 1000
+          const prevFrameTime = Math.floor((state.currentVideoTime || 0) /1000 )*1000 - 990
           if (prevFrameTime >= 0)    
             return setIn(state, ["currentVideoTime"], prevFrameTime)
           else
