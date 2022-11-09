@@ -42,7 +42,7 @@ export default (
   // Weighted time coefficients for linear transition
   let w1 = (t2 - time) / (t2 - t1)
   if (!animate)
-    w1 = 0
+    w1 = 1
   const w2 = 1 - w1
   
   for (const regionId in prevRegionMap) {
