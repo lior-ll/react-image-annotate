@@ -40,7 +40,7 @@ const RegionComponents = {
         width={Math.max(region.w * iw, 0)}
         height={Math.max(region.h * ih, 0)}
         stroke={colorAlpha(region.color, 0.75)}
-        fill={colorAlpha(region.color, 0.25)}
+        fill={colorAlpha(region.color, 0.1)}
       />
     </g>
   )),
@@ -156,7 +156,7 @@ const RegionComponents = {
                 height={10}
                 strokeWidth={2}
                 stroke={colorAlpha(region.color, 0.75)}
-                fill={colorAlpha(region.color, 0.25)}
+                fill={colorAlpha(region.color, 0.1)}
               />
             </g>
           </g>
